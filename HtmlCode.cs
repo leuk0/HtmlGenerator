@@ -26,10 +26,18 @@ namespace HtmlProject
             string path = paths.Last();
             Console.WriteLine(path);
 
-            using (FileStream fs = File.Create(path + ".html"))
-            { 
+            string fileName = path.Split('/')[^1];
+
+            using (StreamWriter sw = new StreamWriter(path))
+            {
                 //  Write hmtl to file here
-                //fs.Wri
+                sw.WriteLine("<html>");
+                sw.WriteLine("<head>");
+                sw.WriteLine("<title>" + fileName + "</title>");
+                sw.WriteLine("</head>");
+                sw.WriteLine("<body>");
+                sw.WriteLine("</body>");
+                sw.WriteLine("</html>");
             }
 
             /*foreach (var path in paths)
