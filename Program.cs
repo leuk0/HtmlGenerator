@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
-using static HtmlGenerator.GlobalVariables;
+using static HtmlProject.GlobalVariables;
 
-namespace HtmlGenerator
+namespace HtmlProject
 {
     class GlobalVariables
     {
