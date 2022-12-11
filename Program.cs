@@ -48,21 +48,8 @@ namespace HtmlProject
             InputErrorHandler();
             CLineFlagHandler();
             AddFileExtension(new List<string> { ".jpg", ".jpeg", ".png" });
-            
-            List<string> files = GetImagePaths();
 
-
-
-
-            /*foreach (string file in Directory.GetFiles(GetRootPath(), "*.*", SearchOption.AllDirectories))
-            {
-
-                //if (GetFileExtensions().Any(x => file.ToLower().EndsWith(x)))
-                if (GetFileExtensions().Any(x => file.ToLower().EndsWith(x)) && GetVerboseDebug())
-                {
-                    Console.WriteLine("[DEBUG]" + CurrentTime() + " " + file);
-                }
-            }*/
+            HtmlCode.GenerateHtmlForImage(GetImagePaths());
 
         }
 
@@ -112,7 +99,8 @@ namespace HtmlProject
 
             foreach (var path in Directory.GetFiles(GetRootPath(), "*.*", SearchOption.AllDirectories).ToList())
             {
-                if (GetFileExtensions().Any(x => path.ToLower().EndsWith(x)))
+                //if (GetFileExtensions().Any(x => path.ToLower().EndsWith(x)))
+                if (GetFileExtensions().Any(x => x.Equals(Path.GetExtension(path).ToLower())))
                 {
                     imageOnlyFilePaths.Add(path);
                 }
