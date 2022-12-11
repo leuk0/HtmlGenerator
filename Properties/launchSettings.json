@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "HtmlGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\balaz\\Desktop\\images"
+    },
+    "HtmlGenerator   -v": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\balaz\\Desktop\\images -v"
+    }
+  }
+}
