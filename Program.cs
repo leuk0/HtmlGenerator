@@ -1,59 +1,75 @@
-﻿using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Runtime.CompilerServices;
-using static HtmlProject.GlobalVariables;
+﻿using static HtmlProject.DirAccess;
 
 namespace HtmlProject
 {
-    class GlobalVariables
+    public class DirAccess
     {
-        private static string rootPath = "";
-        private static bool verboseDebug = false;
-        private static List<string> fileExtesions = new List<string>();
+        private string path;
+        private List<string> folderNames = new();
+        private List<string> imageNames = new();
 
-        public static List<string> GetFileExtensions() { return fileExtesions; }
-        public static void AddFileExtension(string ext)
+        public DirAccess(string path)
         {
-            if (ext.Contains('.'))
-            {
-                fileExtesions.Add('.' + ext.Trim().ToLower());
-            }
-            
-            fileExtesions.Add(ext.Trim().ToLower());
+            this.path = path;
+            AddFolder();
+            AddImage();
         }
-        public static void AddFileExtension(List<string> extList)
+
+        public string GetPath() { return this.path; }
+
+        public List<string> GetFolderNames() { return this.folderNames; }
+        public void AddFolderName(string folder) { this.folderNames.Add(folder); }
+
+        public List<string> GetImageNames() { return this.imageNames; }
+        public void AddImageName(string image) {  this.imageNames.Add(image); }
+
+        private void AddFolder()
         {
-            if (extList.All(x => x.Contains('.')))
+            List<string> folders = Directory.GetDirectories(GetPath()).ToList();
+            foreach (var folder in folders)
             { 
-                fileExtesions.AddRange(extList.ConvertAll(x => "." + x.ToLower()).ToList());
+                AddFolderName(folder);
             }
-
-            fileExtesions.AddRange(extList.ConvertAll(x => x.ToLower()).ToList());
         }
 
-        public static string GetRootPath() { return rootPath; }
-        public static void SetRootPath(string value)
+        private void AddImage()
         {
-            if (value != null) { rootPath = value; }           
+            List<string> images = Directory.GetFiles(GetPath()).ToList();
+            List<string> supportedFileExtensions = new() { ".png", ".jpg", ".jpeg" };
+
+            foreach (var image in images)
+            {
+                if (supportedFileExtensions.Any(x => x.Equals(Path.GetExtension(image).ToLower())))
+                {
+                    AddImageName(image);
+                }
+            }
         }
 
-        public static bool GetVerboseDebug() { return verboseDebug; }
-        public static void SetVerboseDebug(bool value) { verboseDebug = value; }
-    }
+        private static List<DirAccess> dirs = new();
+        public static List<DirAccess> GetDirs() { return dirs; }
+        private static void AddDir(DirAccess o) { dirs.Add(o); }
 
+        public static void FolderStructure(string path)
+        {
+            DirAccess rootFolderObject = new(path);
+            AddDir(rootFolderObject);
+
+            if (rootFolderObject.GetFolderNames().Count() <= 0) { return; }
+
+            foreach (var subFolder in rootFolderObject.GetFolderNames()) { FolderStructure(subFolder); }
+        }
+
+    }
     class Program
     {
         static void Main(string[] args)
         {
             InputErrorHandler();
-            CLineFlagHandler();
-            AddFileExtension(new List<string> { ".jpg", ".jpeg", ".png" });
-
-            HtmlCode.GenerateHtmlForImage(GetImagePaths());
-
+            FolderStructure(args[0]);
+            HtmlCode.IndexHtmlFiles();
         }
 
-        /// <summary> Method <c>InputErrorHandler()</c> checks if user given a command line argument and if it was a directory. </summary>
         private static void InputErrorHandler()
         {
             try
@@ -67,46 +83,12 @@ namespace HtmlProject
             catch (Exception)
             {
                 Console.WriteLine("[Error] " + CurrentTime() + " Not a directory");
-                Console.WriteLine();
                 Environment.Exit(1);
             }
-
-
-            SetRootPath(Environment.GetCommandLineArgs()[1]);
         }
-
-        /// <summary> Method <c>CLineFlagHandler</c> checks for flags that given by the user with the second command line argument. </summary>
-        private static void CLineFlagHandler()
-        {
-            if (Environment.GetCommandLineArgs().Length > 2 && Environment.GetCommandLineArgs()[2] == "-v")
-            {
-                SetVerboseDebug(true);
-                Console.WriteLine("[DEBUG] " + CurrentTime() + " Verbose debugging is turned on");
-            }
-        }
-
-        /// <summary>Returns the current time in 'HH:mm:ss' format. </summary>
-        /// <returns>The current time with string type. </returns>
         private static string CurrentTime() 
         { 
             return DateTime.Now.ToString("HH:mm:ss");
-        }
-        /// <summary> Returns list which is containing the paths to the image files. </summary>
-        /// <returns> A list which is containing the paths to the image files. </returns>
-        private static List<string> GetImagePaths()
-        {
-            List<string> imageOnlyFilePaths = new();
-
-            foreach (var path in Directory.GetFiles(GetRootPath(), "*.*", SearchOption.AllDirectories).ToList())
-            {
-                //if (GetFileExtensions().Any(x => path.ToLower().EndsWith(x)))
-                if (GetFileExtensions().Any(x => x.Equals(Path.GetExtension(path).ToLower())))
-                {
-                    imageOnlyFilePaths.Add(path);
-                }
-            }
-
-            return imageOnlyFilePaths;
         }
     }
 }
