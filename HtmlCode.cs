@@ -25,15 +25,24 @@ namespace HtmlProject
 
                 foreach (var c in trimmedSubDirectory)
                 {
-                    if (c == '\\') { slashCounter++; }
+                    if (c == '\\')
+                    {
+                        slashCounter++;
+                    }
                 }
 
                 StringBuilder sb2 = new();
 
                 for (int i = slashCounter; i > 0; i = i - 1)
                 {
-                    if (i > 1) { sb2.Append("../"); }
-                    else { sb2.Append("."); }
+                    if (i > 1)
+                    {
+                        sb2.Append("../");
+                    }
+                    else
+                    {
+                        sb2.Append(".");
+                    }
                 }
 
                 sb2.Append("/index.html");
@@ -70,6 +79,7 @@ namespace HtmlProject
                     {
                         sw.WriteLine(sb.ToString());
                     }
+
                     ImageHtmlFiles(lib, rootPageLink);
                 }
                 catch (Exception)

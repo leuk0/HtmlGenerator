@@ -15,13 +15,28 @@ namespace HtmlProject
             AddImage();
         }
 
-        public string GetPath() { return this.path; }
+        public string GetPath()
+        {
+            return this.path;
+        }
 
-        public List<string> GetFolderNames() { return this.folderNames; }
-        public void AddFolderName(string folder) { this.folderNames.Add(folder); }
+        public List<string> GetFolderNames()
+        {
+            return this.folderNames;
+        }
+        public void AddFolderName(string folder)
+        {
+            this.folderNames.Add(folder);
+        }
 
-        public List<string> GetImageNames() { return this.imageNames; }
-        public void AddImageName(string image) {  this.imageNames.Add(image); }
+        public List<string> GetImageNames()
+        {
+            return this.imageNames;
+        }
+        public void AddImageName(string image)
+        {
+            this.imageNames.Add(image);
+        }
 
         private void AddFolder()
         {
@@ -47,8 +62,14 @@ namespace HtmlProject
         }
 
         private static List<DirAccess> dirs = new();
-        public static List<DirAccess> GetDirs() { return dirs; }
-        private static void AddDir(DirAccess o) { dirs.Add(o); }
+        public static List<DirAccess> GetDirs()
+        {
+            return dirs;
+        }
+        private static void AddDir(DirAccess o)
+        {
+            dirs.Add(o);
+        }
 
         public static void FolderStructure(string path)
         {
@@ -57,7 +78,10 @@ namespace HtmlProject
 
             if (rootFolderObject.GetFolderNames().Count() <= 0) { return; }
 
-            foreach (var subFolder in rootFolderObject.GetFolderNames()) { FolderStructure(subFolder); }
+            foreach (var subFolder in rootFolderObject.GetFolderNames())
+            {
+                FolderStructure(subFolder);
+            }
         }
 
     }
