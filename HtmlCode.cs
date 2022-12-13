@@ -111,20 +111,20 @@ namespace HtmlProject
                         continue;
                     }
 
-                    nextFile = FileNameWithHtmlExtension(lib.GetImageNames().Skip(1).First());
+                    nextFile = ChangeFileExtensionToHtml(lib.GetImageNames().Skip(1).First());
                     sb.AppendLine($"\t\t<h3>{fileName} <a href=\"./{nextFile}\"> >> </a></h3>");
                     sb.Append($"\t\t<a href=\"./{nextFile}\"><img src=\"./{fileName}\"  style=\"width: 15%; height: auto;\"></a>\n</body>\n</html>");
                 }
                 else if (i == lib.GetImageNames().Count() - 1)
                 {
-                    prevFile = FileNameWithHtmlExtension(lib.GetImageNames()[i - 1]);
+                    prevFile = ChangeFileExtensionToHtml(lib.GetImageNames()[i - 1]);
                     sb.AppendLine($"\t\t<h3><a href=\"./{prevFile}\"> << </a> {fileName}</h3>");
                     sb.Append($"\t\t<img src=\"./{fileName}\" style=\"width: 15%; height: auto;\">\n</body>\n</html>");
                 }
                 else
                 {
-                    nextFile = FileNameWithHtmlExtension(lib.GetImageNames()[i + 1]);
-                    prevFile = FileNameWithHtmlExtension(lib.GetImageNames()[i - 1]);
+                    nextFile = ChangeFileExtensionToHtml(lib.GetImageNames()[i + 1]);
+                    prevFile = ChangeFileExtensionToHtml(lib.GetImageNames()[i - 1]);
                     sb.AppendLine($"\t\t<h3><a href=\"./{prevFile}\"> << </a> {fileName} <a href=\"./{nextFile}\"> >> </a></h3>");
                     sb.Append($"\t\t<a href=\"./{nextFile}\"><img src=\"./{fileName}\"  style=\"width: 15%; height: auto;\"></a>\n\t</body>\n</html>");
                 }
@@ -147,7 +147,7 @@ namespace HtmlProject
             }
         }
 
-        public static string FileNameWithHtmlExtension(string eleres)
+        public static string ChangeFileExtensionToHtml(string eleres)
         {
             return Path.GetFileNameWithoutExtension(eleres) + ".html"; ;
         }
